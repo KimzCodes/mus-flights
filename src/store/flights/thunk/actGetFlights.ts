@@ -1,25 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Auth } from "../../../types/Auth";
+import { Flight } from "../../../types/Flight";
 
-interface UserData {
-  email: string;
-  password: string;
-}
-
-const actLogin = createAsyncThunk(
-  "user/login",
-  async (userData: UserData, thunkAPI) => {
-    const { rejectWithValue, signal } = thunkAPI;
+const actGetFlights = createAsyncThunk(
+  "flights/getFlights",
+  async (_, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
     try {
-      const response: AxiosResponse<Auth> = await axios.post<Auth>(
-        "auth/login",
-        userData,
-        {
-          signal,
-        }
+      const response: AxiosResponse<Flight> = await axios.get<Flight>(
+        "flights"
       );
-
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -32,4 +22,4 @@ const actLogin = createAsyncThunk(
   }
 );
 
-export default actLogin;
+export default actGetFlights;

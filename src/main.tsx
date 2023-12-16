@@ -7,6 +7,8 @@ import { store, persistor } from "./store";
 import AppRoutes from "./routes/AppRoutes";
 // styles
 import "bootstrap/dist/css/bootstrap.min.css";
+// axios
+import "./API/axios-global";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>

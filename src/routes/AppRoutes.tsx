@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //pages
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import InsertFlight from "../pages/InsertFlight";
+import Home from "../pages/Home";
 //layouts
 import WelcomeLayout from "../layouts/WelcomeLayout/WelcomeLayout";
 import MainLayout from "../layouts/MainLayout/MainLayout";
@@ -34,12 +36,19 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: "/home",
+    path: "home",
     element: (
       <Authenticated>
         <MainLayout />
       </Authenticated>
     ),
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: "insert",
+        element: <InsertFlight />,
+      },
+    ],
   },
 ]);
 

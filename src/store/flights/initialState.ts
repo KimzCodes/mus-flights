@@ -1,14 +1,9 @@
-interface Flight {
-  id: string;
-  code: string;
-  capacity: number;
-  departureDate: string;
-}
+import { Flight } from "../../types/Flight";
 
 interface FlightsState {
   loading: "idle" | "pending" | "succeeded" | "failed";
   error: null | string;
-  records: Flight[];
+  records: Array<Flight>;
 }
 
 const initialState: FlightsState = {

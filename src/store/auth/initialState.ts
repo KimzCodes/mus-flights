@@ -1,7 +1,8 @@
+import { Auth } from "../../types/Auth";
 interface AuthState {
   loading: "idle" | "pending" | "succeeded" | "failed";
   isAuthenticated: boolean;
-  user: null | { name: string; email: string; token: string };
+  user: null | Auth;
   error: null | string;
 }
 

@@ -26,8 +26,8 @@ const Header = () => {
               <Nav.Link as={Link} to="">
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to="categories">
-                New Ticket
+              <Nav.Link as={Link} to="insert">
+                New Flight
               </Nav.Link>
             </Nav>
             <Nav>

@@ -15,11 +15,9 @@ type FormValues = {
 };
 
 const Register = () => {
-  const abortControllerRef = useRef<null | { abort: () => void }>(null);
-
-  const { loading, error } = useAppSelector((state) => state.auth);
-
   const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => state.auth);
+  const abortControllerRef = useRef<null | { abort: () => void }>(null);
 
   const {
     handleSubmit,

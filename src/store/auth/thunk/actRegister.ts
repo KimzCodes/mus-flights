@@ -1,15 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
+import { Auth } from "../../../types/Auth";
 
 interface UserData {
   email: string;
   password: string;
-  name: string;
-}
-
-interface LoginResponse {
-  email: string;
-  token: string;
   name: string;
 }
 
@@ -18,14 +13,13 @@ const actRegister = createAsyncThunk(
   async (userData: UserData, thunkAPI) => {
     const { rejectWithValue, signal } = thunkAPI;
     try {
-      const response: AxiosResponse<LoginResponse> =
-        await axios.post<LoginResponse>(
-          "http://localhost:3000/auth/register",
-          userData,
-          {
-            signal,
-          }
-        );
+      const response: AxiosResponse<Auth> = await axios.post<Auth>(
+        "auth/register",
+        userData,
+        {
+          signal,
+        }
+      );
 
       return response.data;
     } catch (error) {
