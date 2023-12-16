@@ -1,6 +1,8 @@
 import { Auth } from "../../types/Auth";
+import { TLoading } from "../../types/SharedTypes";
+
 interface AuthState {
-  loading: "idle" | "pending" | "succeeded" | "failed";
+  loading: TLoading;
   isAuthenticated: boolean;
   user: null | Auth;
   error: null | string;

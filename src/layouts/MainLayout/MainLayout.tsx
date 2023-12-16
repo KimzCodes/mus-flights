@@ -1,14 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "../../components/layout";
-import { Container } from "react-bootstrap/";
+import { Container, Row, Col } from "react-bootstrap/";
 
 const MainLayout = () => {
   return (
-    <Container>
+    <Container style={{ height: "100vh" }}>
       <Header />
-      <div className="mt-2">
-        <Outlet />
-      </div>
+      <Row className="mt-2">
+        <Col sm={{ span: 8, offset: 2 }}>
+          <Outlet />
+        </Col>
+      </Row>
     </Container>
   );
 };

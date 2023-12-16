@@ -1,20 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface FlightData {
-  code: string;
-  capacity: number;
-  departureDate: string;
-}
-
-const actCreateFlight = createAsyncThunk(
-  "flights/create",
-  async (flightData: FlightData, thunkAPI) => {
+const actDeleteFlight = createAsyncThunk(
+  "flights/delete",
+  async (id: string, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-      const response = await axios.post("flights", flightData);
-
-      return response.data;
+      await axios.delete(`flights/${id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data.message || error.message);
@@ -26,4 +18,4 @@ const actCreateFlight = createAsyncThunk(
   }
 );
 
-export default actCreateFlight;
+export default actDeleteFlight;

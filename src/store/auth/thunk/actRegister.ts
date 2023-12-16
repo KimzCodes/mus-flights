@@ -24,7 +24,7 @@ const actRegister = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.data.message);
+        return rejectWithValue(error.response?.data.message || error.message);
       } else {
         // Handle other types of errors
         return rejectWithValue("An unexpected error occurred during login");
