@@ -6,3 +6,7 @@ export interface Flight {
   capacity: number;
   departureDate: string;
 }
+
+export interface IFlightWithCrudHandler extends Flight {
+  handle: "delete" | "edit";
+}

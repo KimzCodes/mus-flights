@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import InsertFlight from "../pages/InsertFlight";
+import EditFlight from "../pages/EditFlight";
 import Home from "../pages/Home";
 //layouts
 import WelcomeLayout from "../layouts/WelcomeLayout/WelcomeLayout";

@@ -8,13 +8,21 @@ interface FlightResponse {
   resources: Flight[];
 }
 
+interface PayLoad {
+  size?: number;
+  page?: number;
+}
+
 const actGetFlights = createAsyncThunk(
   "flights/getFlights",
-  async (_, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI;
+  async (payLoad: PayLoad, thunkAPI) => {
+    const { rejectWithValue, signal } = thunkAPI;
+    const { size, page } = payLoad;
     try {
       const response: AxiosResponse<FlightResponse> =
-        await axios.get<FlightResponse>("flights");
+        await axios.get<FlightResponse>(`flights?page=${page}&size=${size}`, {
+          signal,
+        });
 
       return response.data;
     } catch (error) {

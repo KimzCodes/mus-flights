@@ -1,13 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { Flight } from "../../../types/Flight";
 
-const actDeleteFlight = createAsyncThunk(
-  "flights/delete",
+const actGetFlight = createAsyncThunk(
+  "flights/flightDetails",
   async (id: string, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-      await axios.delete(`flights/${id}`);
-      return id;
+      const response: AxiosResponse<Flight> = await axios.get<Flight>(
+        `flights/${id}/details`
+      );
+      console.log(response);
+      return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data.message || error.message);
@@ -19,4 +23,4 @@ const actDeleteFlight = createAsyncThunk(
   }
 );
 
-export default actDeleteFlight;
+export default actGetFlight;

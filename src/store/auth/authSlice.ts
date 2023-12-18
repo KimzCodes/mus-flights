@@ -61,6 +61,7 @@ const authSlice = createSlice({
       //handle cancelled request
       if (action.error.name === "AbortError") {
         state.loading = "idle";
+        state.error = null;
       }
 
       if (action.payload && typeof action.payload === "string") {
