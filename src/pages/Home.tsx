@@ -2,8 +2,8 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { actGetFlights, actDeleteFlight } from "../store/flights/flightsSlice";
-import { Loading } from "../feedback";
-import { FlightsList, ModalDelete, ModalEdit } from "../flights";
+import { Loading } from "../components/feedback";
+import { FlightsList, ModalDelete, ModalEdit } from "../components/flights";
 import { IFlightWithCrudHandler, Flight } from "../types/Flight";
 
 const Home = () => {
@@ -65,7 +65,7 @@ const Home = () => {
       setPaginationQuery(queryString);
       setCurrentPage(num);
     },
-    [setPaginationQuery]
+    [setPaginationQuery, pageSize]
   );
 
   return (

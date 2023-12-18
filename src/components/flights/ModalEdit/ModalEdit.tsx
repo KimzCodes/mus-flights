@@ -1,11 +1,11 @@
 import { memo, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { actEditFlight } from "../../store/flights/flightsSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { actEditFlight } from "../../../store/flights/flightsSlice";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { flightSchemaEdit } from "../../util/flightSchemaEdit";
+import { flightSchemaEdit } from "../../../util/flightSchemaEdit";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Flight } from "../../types/Flight";
+import { Flight } from "../../../types/Flight";
 
 type Props = {
   showDialog: boolean;
