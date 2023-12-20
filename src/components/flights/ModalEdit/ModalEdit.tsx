@@ -21,7 +21,6 @@ type FormValues = {
 
 const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
   const { editLoading, error } = useAppSelector((state) => state.flights);
-
   const dispatch = useAppDispatch();
 
   const {

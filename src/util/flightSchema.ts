@@ -1,35 +1,29 @@
 import * as yup from "yup";
 
 export const flightSchema = yup.object().shape({
-  code: yup
-    .string()
-    .required("Code is required")
-    .matches(
-      /^[a-zA-Z]{6}$/,
-      "Code must only contain 6 lowercase letters from a to z"
+  photo: yup
+    .mixed()
+    .required("Please upload an image")
+    .test(
+      "fileSize",
+      "File is too large",
+      (value) => value && value.size <= 2 * 1024 * 1024 // 2MB in bytes
+    )
+    .test(
+      "fileType",
+      "Only images allowed",
+      (value) => value && value.type.startsWith("image/")
     ),
-
-  capacity: yup
-    .number()
-    .required("Capacity is required")
-    .positive("Capacity must be a positive number")
-    .max(200, "Maximum capacity is 200")
-    .transform((value, originalValue) => {
-      return originalValue === "" ? undefined : value;
-    }),
-
-  departureDate: yup
-    .string()
-    .transform((originalValue) => {
-      // Check if the original value is defined
-      if (originalValue) {
-        // Transform to YYYY-MM-DD
-        const date = new Date(originalValue);
-        return date.toISOString().split("T")[0];
-      }
-      // Return an empty string or handle undefined as needed
-      return "";
-    })
-    .matches(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (YYYY-MM-DD)")
-    .required("Date is required"),
+  // file: yup
+  //   .mixed()
+  //   .test("file", "Please select a file", (value) => {
+  //     return Boolean(value && (value as FileList)[0] instanceof File);
+  //   })
+  //   .test("fileType", "Invalid file type, only images are allowed", (value) => {
+  //     return Boolean(value && (value as FileList)[0].type.startsWith("image/"));
+  //   })
+  //   .test("fileSize", "File size must be less than 5MB", (value) => {
+  //     return Boolean(value && (value as FileList)[0].size <= 5 * 1024 * 1024);
+  //   })
+  //   .required(),
 });

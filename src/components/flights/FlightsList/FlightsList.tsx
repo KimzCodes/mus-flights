@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Table, ButtonGroup, Button, Pagination, Form } from "react-bootstrap";
+import { Table, ButtonGroup, Button, Pagination } from "react-bootstrap";
 import { IFlightWithCrudHandler } from "../../../types/Flight";
 import { Flight } from "../../../types/Flight";
 
@@ -7,7 +7,7 @@ type props = {
   records: Array<Flight>;
   selectRecord: (data: IFlightWithCrudHandler) => void;
   totalPaginationItems: number;
-  pagination: (page: number, size: number) => void;
+  pagination: (page: number) => void;
   pageSize: number;
   currentPage: number;
 };
@@ -85,17 +85,13 @@ const FlightsList = memo(
           <tbody>{renderFlights}</tbody>
         </Table>
 
-        <Pagination>{paginationItems}</Pagination>
-        <Form.Select
-          aria-label="Default select example"
-          onChange={(e) => {
-            console.log(e.target.value);
-          }}
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        </Form.Select>
+        {totalPaginationItems > 1 ? (
+          <Pagination className="d-flex align-items-center justify-content-center ">
+            {paginationItems}
+          </Pagination>
+        ) : (
+          ""
+        )}
       </>
     );
   }

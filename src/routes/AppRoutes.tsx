@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //pages
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ErrorPage from "../pages/ErrorPage";
 import InsertFlight from "../pages/InsertFlight";
 import Home from "../pages/Home";
 //layouts
@@ -20,23 +21,24 @@ const routes = createBrowserRouter([
         <WelcomeLayout />
       </Visitor>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <Login />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <Register />,
       },
     ],
   },
   {
-    path: "home",
+    path: "/home",
     element: (
       <Authenticated>
         <MainLayout />

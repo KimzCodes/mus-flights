@@ -5,6 +5,7 @@ import actEditFlight from "./thunk/actEditFlight";
 import actGetFlights from "./thunk/actGetFlights";
 import actGetFlight from "./thunk/actGetFlight";
 import actDeleteFlight from "./thunk/actDeleteFlight";
+import actCheckingCodeAvailability from "./thunk/actCheckingCodeAvailability";
 
 const flightsSlice = createSlice({
   name: "flights",
@@ -24,7 +25,6 @@ const flightsSlice = createSlice({
     });
 
     builder.addCase(actGetFlights.rejected, (state, action) => {
-      //handle cancelled request
       if (action.error.name === "AbortError") {
         state.loading = "idle";
         state.error = null;
@@ -88,6 +88,18 @@ const flightsSlice = createSlice({
         state.error = action.payload;
       }
     });
+
+    // Checking Code Availability
+    builder.addCase(actCheckingCodeAvailability.pending, (state) => {
+      state.checkingCodeAvailability = "pending";
+    });
+    builder.addCase(actCheckingCodeAvailability.fulfilled, (state, action) => {
+      state.checkingCodeAvailability = action.payload.status;
+    });
+    builder.addCase(actCheckingCodeAvailability.rejected, (state) => {
+      //In case of failure, no error message will be displayed. Backend validation will serve as the second line of defense.
+      state.checkingCodeAvailability = "failed";
+    });
   },
 });
 
@@ -97,5 +109,6 @@ export {
   actDeleteFlight,
   actEditFlight,
   actGetFlight,
+  actCheckingCodeAvailability,
 };
 export default flightsSlice.reducer;

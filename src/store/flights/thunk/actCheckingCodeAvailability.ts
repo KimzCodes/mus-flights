@@ -1,14 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Flight } from "../../../types/Flight";
 
-const actGetFlight = createAsyncThunk(
-  "flights/flightDetails",
-  async (id: string, thunkAPI) => {
+interface Response {
+  status: "available" | "unavailable";
+}
+
+const actCheckingCodeAvailability = createAsyncThunk(
+  "flights/checkingCodeAvailability",
+  async (code: string, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-      const response: AxiosResponse<Flight> = await axios.get<Flight>(
-        `flights/${id}/details`
+      const response: AxiosResponse<Response> = await axios.get<Response>(
+        `flights/available?code=${code}`
       );
 
       return response.data;
@@ -23,4 +26,4 @@ const actGetFlight = createAsyncThunk(
   }
 );
 
-export default actGetFlight;
+export default actCheckingCodeAvailability;

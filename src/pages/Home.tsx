@@ -15,7 +15,7 @@ const Home = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  // split holder to prevent unwanted rendering while open edit and delete modal
+  // split selected data holder to prevent unwanted rendering while open edit or delete modal
   const selectDeleteRecord = useRef<null | Flight>(null);
   const selectedEditRecord = useRef<null | Flight>(null);
   const pageSize = 10;
@@ -25,16 +25,13 @@ const Home = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(paginationQuery);
-    const urlSize = params.get("size") ?? pageSize;
-    const urlSelectedPage = params.get("page") ?? 1;
+    const selectedPage = params.get("page") ?? 1;
 
     const promise = dispatch(
-      actGetFlights({ size: +urlSize, page: +urlSelectedPage })
+      actGetFlights({ size: pageSize, page: +selectedPage })
     );
 
-    return () => {
-      promise.abort();
-    };
+    return () => promise.abort();
   }, [dispatch, paginationQuery]);
 
   //get info of selected flight however its edit or delete operation
@@ -61,11 +58,11 @@ const Home = () => {
   // paginate
   const paginationHandler = useCallback(
     (num: number) => {
-      const queryString = `?page=${num}&size=${pageSize}`;
+      const queryString = `?page=${num}`;
       setPaginationQuery(queryString);
       setCurrentPage(num);
     },
-    [setPaginationQuery, pageSize]
+    [setPaginationQuery]
   );
 
   return (
