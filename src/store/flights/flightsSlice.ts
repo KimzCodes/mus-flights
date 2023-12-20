@@ -10,7 +10,11 @@ import actCheckingCodeAvailability from "./thunk/actCheckingCodeAvailability";
 const flightsSlice = createSlice({
   name: "flights",
   initialState,
-  reducers: {},
+  reducers: {
+    resetCheckingCodeAvailability: (state) => {
+      state.checkingCodeAvailability = "idle";
+    },
+  },
   extraReducers: (builder) => {
     //get all
     builder.addCase(actGetFlights.pending, (state) => {
@@ -111,4 +115,7 @@ export {
   actGetFlight,
   actCheckingCodeAvailability,
 };
+
+export const { resetCheckingCodeAvailability } = flightsSlice.actions;
+
 export default flightsSlice.reducer;

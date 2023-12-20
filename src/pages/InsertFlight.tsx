@@ -3,35 +3,38 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   actCreateFlight,
   actCheckingCodeAvailability,
+  resetCheckingCodeAvailability,
 } from "../store/flights/flightsSlice";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { flightSchema } from "../util/flightSchema";
+import useFlightValidation from "../hooks/useFlightValidation";
 import { Button, Row, Col, Form } from "react-bootstrap";
-
-type FileType = {
-  name: string;
-  size: number;
-  type: string;
-};
 
 type FormValues = {
   code: string;
   capacity: number;
   departureDate: string;
-  photo: FileType;
+  photo: FileList;
 };
 
 const InsertFlight = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const {
+    imageValidation,
+    codeValidation,
+    capacityValidation,
+    departureDateValidation,
+  } = useFlightValidation();
+
   const { loading, error, checkingCodeAvailability } = useAppSelector(
     (state) => state.flights
   );
 
   const [fireCheckCodeAvailability, setFireCheckCodeAvailability] =
     useState(true);
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const {
@@ -43,7 +46,6 @@ const InsertFlight = () => {
     setError,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver<FormValues>(flightSchema),
     mode: "onBlur",
   });
 
@@ -56,10 +58,16 @@ const InsertFlight = () => {
     }
   }, [checkingCodeAvailability, setError]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetCheckingCodeAvailability());
+    };
+  }, [dispatch]);
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    dispatch(actCreateFlight(data));
-    // .unwrap()
-    // .then(() => navigate("/home"));
+    dispatch(actCreateFlight(data))
+      .unwrap()
+      .then(() => navigate("/home"));
   };
 
   //This function will detect if any changes occur while the user is focused on the input.
@@ -74,7 +82,6 @@ const InsertFlight = () => {
   //function will fire onblur with condition: validation is passed and there is a change happen in code input
 
   //That means "Check Code Availability Handler" and "Handle Code Change" are connected to change the "setFireCheckCodeAvailability" value from false to true.
-
   const checkCodeAvailabilityHandler = async (
     e: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -106,7 +113,7 @@ const InsertFlight = () => {
           <Form.Label>Flight Code</Form.Label>
           <Form.Control
             type="text"
-            {...register("code")}
+            {...register("code", codeValidation)}
             isInvalid={!!errors.code}
             isValid={checkingCodeAvailability === "available" && !errors.code} //to show green flag when code is available
             disabled={checkingCodeAvailability === "pending"} //disable input while do checking
@@ -114,7 +121,7 @@ const InsertFlight = () => {
             onChange={handleCodeChange}
           />
           {checkingCodeAvailability === "pending" ? (
-            <Form.Text id="passwordHelpBlock" muted>
+            <Form.Text muted>
               Verifying code availability, please wait...
             </Form.Text>
           ) : (
@@ -133,7 +140,7 @@ const InsertFlight = () => {
           <Form.Label>Departure Date</Form.Label>
           <Form.Control
             type="date"
-            {...register("departureDate")}
+            {...register("departureDate", departureDateValidation)}
             isInvalid={!!errors.departureDate}
           />
           <Form.Control.Feedback type="invalid">
@@ -145,7 +152,7 @@ const InsertFlight = () => {
           <Form.Label>Capacity</Form.Label>
           <Form.Control
             type="number"
-            {...register("capacity")}
+            {...register("capacity", capacityValidation)}
             isInvalid={!!errors.capacity}
           />
           <Form.Control.Feedback type="invalid">
@@ -156,10 +163,13 @@ const InsertFlight = () => {
         <Form.Group className="mb-3" style={{ position: "relative" }}>
           <Row>
             <Col sm={{ span: 7 }}>
-              <Form.Label>Photo</Form.Label>
+              <Form.Label>
+                Photo <span style={{ fontSize: "13px" }}>(optional)</span>
+              </Form.Label>
               <Form.Control
                 type="file"
-                {...register("photo")}
+                accept="image/png, image/jpeg"
+                {...register("photo", imageValidation)}
                 isInvalid={!!errors.photo}
                 onChange={onPhotoChange}
               />

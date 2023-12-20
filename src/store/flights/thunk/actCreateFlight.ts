@@ -12,14 +12,18 @@ const actCreateFlight = createAsyncThunk(
   "flights/create",
   async (data: FlightData, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
-    const formData = new FormData();
-    formData.append("code", data.code);
-    formData.append("capacity", String(data.capacity));
-    formData.append("departureDate", String(data.departureDate));
-    formData.append("photo", data.photo[0]);
-
+    let response;
     try {
-      const response = await axios.post("flights/withPhoto", formData);
+      if (data.photo[0]) {
+        const formData = new FormData();
+        formData.append("code", data.code);
+        formData.append("capacity", String(data.capacity));
+        formData.append("departureDate", String(data.departureDate));
+        formData.append("photo", data.photo[0]);
+        response = await axios.post("flights/withPhoto", formData);
+      } else {
+        response = await axios.post("flights", data);
+      }
 
       return response.data;
     } catch (error) {
