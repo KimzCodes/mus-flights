@@ -29,6 +29,7 @@ const Home = () => {
   const selectDeleteRecord = useRef<null | IFlight>(null);
   const selectedEditRecord = useRef<null | IFlight>(null);
   const selectedPreviewImageRecord = useRef<null | IFlight>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   // get prev state to search term changed
 
   const pageSize = 10;
@@ -52,6 +53,10 @@ const Home = () => {
 
   //work in search
   useEffect(() => {
+    //stay focus if search not empty
+    if (searchQuery.length > 0) {
+      searchInputRef.current?.focus();
+    }
     const isValidInput = /^[a-zA-Z]{1,6}$/.test(searchQuery);
 
     if (searchQuery !== prevSearchQuery && isValidInput) {
@@ -72,6 +77,7 @@ const Home = () => {
       };
     }
     // reset
+
     if (
       isValidInput === false &&
       searchQuery === "" &&
@@ -152,11 +158,18 @@ const Home = () => {
       />
       {/* search Control */}
       <Form.Control
+        ref={searchInputRef}
         type="text"
-        placeholder="search with valid flight code"
+        placeholder="search with valid flight code (characters only)"
         className="mb-3"
         disabled={loading === "pending" ? true : false}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => {
+          {
+            // Remove non-alphabetic characters using a regular expression
+            const sanitizedValue = e.target.value.replace(/[^a-z]/gi, "");
+            setSearchQuery(sanitizedValue);
+          }
+        }}
         value={searchQuery}
         maxLength={6}
       />

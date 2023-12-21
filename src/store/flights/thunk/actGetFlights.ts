@@ -30,7 +30,6 @@ const actGetFlights = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.log(error);
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data.message || error.message);
       } else {
