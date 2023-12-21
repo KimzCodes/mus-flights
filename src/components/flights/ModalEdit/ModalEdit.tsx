@@ -2,8 +2,6 @@ import { memo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { actEditFlight } from "../../../store/flights/flightsSlice";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { flightSchemaEdit } from "../../../util/flightSchemaEdit";
 import { Modal, Button, Form } from "react-bootstrap";
 import { IFlight } from "../../../types/Flight";
 
@@ -28,9 +26,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: yupResolver(flightSchemaEdit),
-  });
+  } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     dispatch(

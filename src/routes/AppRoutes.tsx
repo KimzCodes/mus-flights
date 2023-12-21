@@ -1,14 +1,17 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //pages
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+const Login = React.lazy(() => import("../pages/Login"));
+const Register = React.lazy(() => import("../pages/Register"));
+const Home = React.lazy(() => import("../pages/Home"));
+const InsertFlight = React.lazy(() => import("../pages/InsertFlight"));
 import ErrorPage from "../pages/ErrorPage";
-import InsertFlight from "../pages/InsertFlight";
-import Home from "../pages/Home";
 //layouts
 import WelcomeLayout from "../layouts/WelcomeLayout/WelcomeLayout";
 import MainLayout from "../layouts/MainLayout/MainLayout";
+// suspense
+import SuspenseLoading from "../components/feedback/SuspenseLoading/SuspenseLoading";
 // guards
 import Visitor from "../components/guards/Visitor";
 import Authenticated from "../components/guards/Authenticated";
@@ -25,15 +28,28 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Login />,
+
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <Login />
+          </Suspense>
+        ),
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <Login />
+          </Suspense>
+        ),
       },
       {
         path: "register",
-        element: <Register />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <Register />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -45,10 +61,21 @@ const routes = createBrowserRouter([
       </Authenticated>
     ),
     children: [
-      { index: true, element: <Home /> },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <Home />
+          </Suspense>
+        ),
+      },
       {
         path: "insert",
-        element: <InsertFlight />,
+        element: (
+          <Suspense fallback={<SuspenseLoading />}>
+            <InsertFlight />
+          </Suspense>
+        ),
       },
     ],
   },

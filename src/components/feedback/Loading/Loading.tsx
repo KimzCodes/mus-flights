@@ -1,7 +1,7 @@
-import { TLoading } from "../../../types/SharedTypes";
 import Lottie from "lottie-react";
 import loadingAnimation from "../../../assets/lottie/loadingAnimation.json";
 import errorServerAnimation from "../../../assets/lottie/errorServerAnimation.json";
+import { TLoading } from "../../../types/SharedTypes";
 
 type Props = {
   loading: TLoading;
