@@ -6,17 +6,30 @@ interface FlightData {
   code: string;
   capacity: number;
   departureDate: string;
+  photo?: FileList | null;
 }
 
 const actEditFlight = createAsyncThunk(
   "flights/edit",
-  async (formData: FlightData, thunkAPI) => {
-    console.log(formData);
+  async (data: FlightData, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
+    const { id, photo, ...flightData } = data;
+    let response;
     try {
-      const { id, ...flightData } = formData;
+      if (photo && photo.length > 0) {
+        const formData = new FormData();
+        formData.append("code", data.code);
+        formData.append("capacity", String(data.capacity));
+        formData.append("departureDate", String(data.departureDate));
+        formData.append("photo", photo[0]);
 
-      const response = await axios.put<FlightData>(`flights/${id}`, flightData);
+        response = await axios.put<FlightData>(
+          `flights/${id}/withPhoto`,
+          formData
+        );
+      } else {
+        response = await axios.put<FlightData>(`flights/${id}`, flightData);
+      }
 
       return response.data;
     } catch (error) {

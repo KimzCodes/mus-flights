@@ -57,6 +57,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
         code: data?.code ? data?.code : "",
         departureDate: data.departureDate,
         capacity: data?.capacity,
+        photo: data?.photo,
       })
     )
       .unwrap()
