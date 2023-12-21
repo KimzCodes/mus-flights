@@ -13,10 +13,6 @@ const flightsSlice = createSlice({
     resetCheckingCodeAvailability: (state) => {
       state.checkingCodeAvailability = "idle";
     },
-    resetPreviewImage: (state) => {
-      state.previewImageLoading = "idle";
-      state.previewImageSrc = null;
-    },
   },
   extraReducers: (builder) => {
     //get all
@@ -123,7 +119,6 @@ export {
   actCheckingCodeAvailability,
 };
 
-export const { resetCheckingCodeAvailability, resetPreviewImage } =
-  flightsSlice.actions;
+export const { resetCheckingCodeAvailability } = flightsSlice.actions;
 
 export default flightsSlice.reducer;
