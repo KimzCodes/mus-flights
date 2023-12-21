@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { Table, ButtonGroup, Button, Pagination } from "react-bootstrap";
-import { IFlightWithCrudHandler } from "../../../types/Flight";
-import { Flight } from "../../../types/Flight";
+import ReviewImage from "../../../assets/svg/reviewImage.svg?react";
+import NoImage from "../../../assets/svg/noImage.svg?react";
+import { IFlightWithCrudHandler, IFlight } from "../../../types/Flight";
 
 type props = {
-  records: Array<Flight>;
+  records: Array<IFlight>;
   selectRecord: (data: IFlightWithCrudHandler) => void;
   totalPaginationItems: number;
   pagination: (page: number) => void;
@@ -39,6 +40,15 @@ const FlightsList = memo(
             <td>{record.code}</td>
             <td>{record.capacity}</td>
             <td>{record.departureDate}</td>
+            <td>
+              <div className="d-flex justify-content-center">
+                {record.img ? (
+                  <ReviewImage style={{ height: "30px", width: "30px" }} />
+                ) : (
+                  <NoImage style={{ height: "30px", width: "30px" }} />
+                )}
+              </div>
+            </td>
             <td className="text-center">
               <ButtonGroup>
                 <Button
@@ -79,7 +89,8 @@ const FlightsList = memo(
               <th>Code</th>
               <th>Capacity</th>
               <th>Departure Date</th>
-              <td></td>
+              <th>Review Image</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>{renderFlights}</tbody>

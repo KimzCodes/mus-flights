@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
-import { Flight } from "../../../types/Flight";
+import { IFlight } from "../../../types/Flight";
 
 interface FlightResponse {
   total: number;
   count: number;
-  resources: Flight[];
+  resources: IFlight[];
 }
 
 interface PayLoad {

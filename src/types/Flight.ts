@@ -1,4 +1,4 @@
-export interface Flight {
+export interface IFlight {
   id: string;
   img: string;
   status: string;

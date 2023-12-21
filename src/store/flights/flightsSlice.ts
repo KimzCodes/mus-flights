@@ -83,8 +83,11 @@ const flightsSlice = createSlice({
       state.loading = "pending";
       state.error = null;
     });
-    builder.addCase(actDeleteFlight.fulfilled, (state) => {
+    builder.addCase(actDeleteFlight.fulfilled, (state, action) => {
       state.loading = "succeeded";
+      state.records = state.records.filter(
+        (record) => record.id !== action.payload
+      );
     });
     builder.addCase(actDeleteFlight.rejected, (state, action) => {
       state.loading = "failed";

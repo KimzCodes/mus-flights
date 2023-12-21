@@ -37,9 +37,13 @@ const codeValidation: RegisterOptions = {
 
 const capacityValidation: RegisterOptions = {
   required: "Capacity is required",
+  min: {
+    value: 1,
+    message: "Capacity should be greater than 0",
+  },
   max: {
     value: 200,
-    message: "Capacity should be less than or equal to 200",
+    message: "Capacity should be less than 200",
   },
 };
 
@@ -60,6 +64,7 @@ const departureDateValidation: RegisterOptions = {
     return true;
   },
 };
+
 const useFlightValidation = () => {
   return {
     imageValidation,

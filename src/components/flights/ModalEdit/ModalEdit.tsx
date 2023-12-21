@@ -5,12 +5,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { flightSchemaEdit } from "../../../util/flightSchemaEdit";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Flight } from "../../../types/Flight";
+import { IFlight } from "../../../types/Flight";
 
 type Props = {
   showDialog: boolean;
   setShowDialog: (value: boolean) => void;
-  flightData: Flight | null;
+  flightData: IFlight | null;
 };
 
 type FormValues = {
