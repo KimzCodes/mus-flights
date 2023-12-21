@@ -37,6 +37,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
     formState: { errors },
   } = useForm<FormValues>({ mode: "onBlur" });
 
+  //fill form inputs
   useEffect(() => {
     reset({
       code: flightData?.code,
@@ -44,8 +45,8 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
       departureDate: flightData?.departureDate,
     });
 
-    if(){
-      
+    if (flightData?.img) {
+      setImagePreview(`http://localhost:3000/flights/${flightData?.id}/photo`);
     }
   }, [flightData, reset]);
 
@@ -120,9 +121,10 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
               {errors.capacity?.message}
             </Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group className="mb-3" style={{ position: "relative" }}>
             <Form.Label>
-              Photo <span style={{ fontSize: "13px" }}>(optional)</span>
+              Photo <span style={{ fontSize: "13px" }}>(Replace)</span>
             </Form.Label>
             <Form.Control
               type="file"
@@ -131,21 +133,16 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
               isInvalid={!!errors.photo}
               onChange={onPhotoChange}
             />
-            {imagePreview ? (
-              <Form.Text muted className="mt-1">
-                If you choose a file now and then click cancel, the selected
-                image will be deleted.
-              </Form.Text>
-            ) : (
-              ""
-            )}
 
             <Form.Control.Feedback type="invalid">
               {errors.photo?.message}
             </Form.Control.Feedback>
-
+            <Form.Text muted className="mt-1">
+              If you choose a file now and then click cancel, the selected image
+              will be deleted.
+            </Form.Text>
             {imagePreview ? (
-              <div>
+              <div className="mt-1">
                 <img
                   src={imagePreview}
                   style={{ maxWidth: "100%", maxHeight: "150px" }}
