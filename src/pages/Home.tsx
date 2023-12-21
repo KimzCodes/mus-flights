@@ -1,10 +1,17 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { actGetFlights, actDeleteFlight } from "../store/flights/flightsSlice";
+import { useSearchParams } from "react-router-dom";
+import usePrevState from "../hooks/usePrevState";
 import { Loading } from "../components/feedback";
-import { FlightsList, ModalDelete, ModalEdit } from "../components/flights";
-import { IFlightWithCrudHandler, Flight } from "../types/Flight";
+import {
+  FlightsList,
+  ModalDelete,
+  ModalEdit,
+  ModalPhotoReview,
+} from "../components/flights";
+import Form from "react-bootstrap/Form";
+import { IFlightWithCrudHandler, IFlight } from "../types/Flight";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -14,19 +21,25 @@ const Home = () => {
 
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const [previewImageModal, setPreviewImageModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  // split selected data holder to prevent unwanted rendering while open edit or delete modal
-  const selectDeleteRecord = useRef<null | Flight>(null);
-  const selectedEditRecord = useRef<null | Flight>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const prevSearchQuery = usePrevState(searchQuery);
+  // split selected data holder to prevent unnecessary rendering while open edit or delete modal
+  const selectDeleteRecord = useRef<null | IFlight>(null);
+  const selectedEditRecord = useRef<null | IFlight>(null);
+  const selectedPreviewImageRecord = useRef<null | IFlight>(null);
+  // get prev state to search term changed
+
   const pageSize = 10;
   const totalPaginationItems = Math.ceil(total / pageSize);
   // use search params to update url without reload the page
   const [paginationQuery, setPaginationQuery] = useSearchParams();
 
+  // work in pagination and mounting
   useEffect(() => {
     const params = new URLSearchParams(paginationQuery);
     const selectedPage = params.get("page") ?? 1;
-
     const promise = dispatch(
       actGetFlights({ size: pageSize, page: +selectedPage })
     );
@@ -34,13 +47,32 @@ const Home = () => {
     return () => promise.abort();
   }, [dispatch, paginationQuery]);
 
+  //work in search
+  useEffect(() => {
+    const isValidInput = /^[a-zA-Z]{1,6}$/.test(searchQuery);
+
+    if (searchQuery !== prevSearchQuery && isValidInput) {
+      const debounceSearch = setTimeout(() => {
+        dispatch(
+          actGetFlights({ size: pageSize, page: 1, search: searchQuery })
+        );
+      }, 500);
+
+      return () => {
+        clearTimeout(debounceSearch);
+      };
+    }
+  }, [searchQuery, prevSearchQuery, pageSize, dispatch]);
+
   //get info of selected flight however its edit or delete operation
   const selectRecordHandler = useCallback((data: IFlightWithCrudHandler) => {
     const { handle, ...flightData } = data;
-
     if (handle === "delete") {
       selectDeleteRecord.current = flightData;
       setDeleteModal(true);
+    } else if (handle === "imageReview") {
+      selectedPreviewImageRecord.current = flightData;
+      setPreviewImageModal(true);
     } else {
       selectedEditRecord.current = flightData;
       setEditModal(true);
@@ -50,7 +82,6 @@ const Home = () => {
   // delete record
   const deleteHandler = useCallback(() => {
     const id: string = selectDeleteRecord.current?.id ?? "";
-
     setDeleteModal(false);
     dispatch(actDeleteFlight(id));
   }, [dispatch]);
@@ -78,6 +109,20 @@ const Home = () => {
         flightData={selectedEditRecord.current}
         showDialog={editModal}
         setShowDialog={setEditModal}
+      />
+      <ModalPhotoReview
+        flightData={selectedPreviewImageRecord.current}
+        showDialog={previewImageModal}
+        setShowDialog={setPreviewImageModal}
+      />
+      <Form.Control
+        type="text"
+        placeholder="search with valid flight code"
+        className="mb-3"
+        disabled={loading === "pending" ? true : false}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        value={searchQuery}
+        maxLength={6}
       />
       <Loading loading={loading} error={error}>
         <FlightsList

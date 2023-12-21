@@ -1,34 +1,33 @@
 import { memo } from "react";
-import { Modal, Button } from "react-bootstrap";
+
+import { Modal } from "react-bootstrap";
+import { IFlight } from "../../../types/Flight";
 
 type Props = {
+  flightData: IFlight | null;
   showDialog: boolean;
-  code: string;
   setShowDialog: (value: boolean) => void;
-  deleteHandler: () => void;
 };
-const ModalDelete = memo(
-  ({ showDialog, setShowDialog, code, deleteHandler }: Props) => {
+const ModalPhotoReview = memo(
+  ({ flightData, showDialog, setShowDialog }: Props) => {
     return (
       <Modal show={showDialog} onHide={() => setShowDialog(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete Record</Modal.Title>
+          <Modal.Title>
+            Preview flight with code
+            <span style={{ fontWeight: "bold" }}> {flightData?.code}</span>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are your sure you want to delete flight with code
-          <span style={{ fontWeight: "bold" }}> {code}</span>
+          <img
+            src={`http://localhost:3000/flights/${flightData?.id}/photo`}
+            alt={flightData?.code}
+            style={{ width: "100%" }}
+          />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDialog(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={deleteHandler}>
-            Delete
-          </Button>
-        </Modal.Footer>
       </Modal>
     );
   }
 );
 
-export default ModalDelete;
+export default ModalPhotoReview;

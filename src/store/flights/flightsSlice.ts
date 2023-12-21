@@ -3,7 +3,6 @@ import initialState from "./initialState";
 import actCreateFlight from "./thunk/actCreateFlight";
 import actEditFlight from "./thunk/actEditFlight";
 import actGetFlights from "./thunk/actGetFlights";
-import actGetFlight from "./thunk/actGetFlight";
 import actDeleteFlight from "./thunk/actDeleteFlight";
 import actCheckingCodeAvailability from "./thunk/actCheckingCodeAvailability";
 
@@ -13,6 +12,10 @@ const flightsSlice = createSlice({
   reducers: {
     resetCheckingCodeAvailability: (state) => {
       state.checkingCodeAvailability = "idle";
+    },
+    resetPreviewImage: (state) => {
+      state.previewImageLoading = "idle";
+      state.previewImageSrc = null;
     },
   },
   extraReducers: (builder) => {
@@ -58,6 +61,7 @@ const flightsSlice = createSlice({
         state.error = action.payload;
       }
     });
+
     //edit
     builder.addCase(actEditFlight.pending, (state) => {
       state.editLoading = "pending";
@@ -78,6 +82,7 @@ const flightsSlice = createSlice({
         state.error = action.payload;
       }
     });
+
     //delete
     builder.addCase(actDeleteFlight.pending, (state) => {
       state.loading = "pending";
@@ -115,10 +120,10 @@ export {
   actGetFlights,
   actDeleteFlight,
   actEditFlight,
-  actGetFlight,
   actCheckingCodeAvailability,
 };
 
-export const { resetCheckingCodeAvailability } = flightsSlice.actions;
+export const { resetCheckingCodeAvailability, resetPreviewImage } =
+  flightsSlice.actions;
 
 export default flightsSlice.reducer;

@@ -7,6 +7,6 @@ export interface IFlight {
   departureDate: string;
 }
 
-export interface IFlightWithCrudHandler extends Flight {
-  handle: "delete" | "edit";
+export interface IFlightWithCrudHandler extends IFlight {
+  handle: "delete" | "edit" | "imageReview";
 }

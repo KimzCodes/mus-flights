@@ -43,7 +43,12 @@ const FlightsList = memo(
             <td>
               <div className="d-flex justify-content-center">
                 {record.img ? (
-                  <ReviewImage style={{ height: "30px", width: "30px" }} />
+                  <ReviewImage
+                    style={{ height: "30px", width: "30px", cursor: "pointer" }}
+                    onClick={() =>
+                      selectRecord({ ...record, handle: "imageReview" })
+                    }
+                  />
                 ) : (
                   <NoImage style={{ height: "30px", width: "30px" }} />
                 )}
@@ -74,8 +79,8 @@ const FlightsList = memo(
         ))
       ) : (
         <tr>
-          <td colSpan={5} className="text-center">
-            There are no records to render
+          <td colSpan={6} className="text-center">
+            There are no flights to render
           </td>
         </tr>
       );

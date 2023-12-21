@@ -1,4 +1,4 @@
-import { Flight } from "../../types/Flight";
+import { IFlight } from "../../types/Flight";
 import { TLoading } from "../../types/SharedTypes";
 interface FlightsState {
   loading: TLoading;
@@ -10,8 +10,8 @@ interface FlightsState {
     | "available"
     | "failed";
   error: null | string;
-  records: Array<Flight>;
-  selectedRecord: Flight | null;
+  records: Array<IFlight>;
+  selectedRecord: IFlight | null;
   total: number;
 }
 

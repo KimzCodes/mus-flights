@@ -1,32 +1,5 @@
 import { RegisterOptions } from "react-hook-form";
 
-const imageValidation: RegisterOptions = {
-  validate: (value) => {
-    if (
-      !value ||
-      typeof value !== "object" ||
-      !("length" in value) ||
-      value.length === 0
-    ) {
-      // No file provided, validation is successful
-      return true;
-    }
-
-    const file = value[0] as File;
-    const allowedTypes = ["image/jpeg", "image/png"];
-
-    if (!allowedTypes.includes(file.type)) {
-      return "File type not supported. Please upload a JPEG or PNG image.";
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-      return "File size should be less than 2MB.";
-    }
-
-    return true;
-  },
-};
-
 const codeValidation: RegisterOptions = {
   required: "Flight Code is required",
   pattern: {
@@ -61,6 +34,33 @@ const departureDateValidation: RegisterOptions = {
     if (selectedDate <= currentDate) {
       return "Departure Date should be in the future";
     }
+    return true;
+  },
+};
+
+const imageValidation: RegisterOptions = {
+  validate: (value) => {
+    if (
+      !value ||
+      typeof value !== "object" ||
+      !("length" in value) ||
+      value.length === 0
+    ) {
+      // No file provided, validation is successful
+      return true;
+    }
+
+    const file = value[0] as File;
+    const allowedTypes = ["image/jpeg", "image/png"];
+
+    if (!allowedTypes.includes(file.type)) {
+      return "File type not supported. Please upload a JPEG or PNG image.";
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      return "File size should be less than 2MB.";
+    }
+
     return true;
   },
 };
