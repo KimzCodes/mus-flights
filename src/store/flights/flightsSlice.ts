@@ -23,7 +23,7 @@ const flightsSlice = createSlice({
 
     builder.addCase(actGetFlights.fulfilled, (state, action) => {
       state.loading = "succeeded";
-      state.total = action.payload.total;
+      state.count = action.payload.count;
       state.records = action.payload.resources;
     });
 

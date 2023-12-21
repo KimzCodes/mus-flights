@@ -12,7 +12,7 @@ interface FlightsState {
   error: null | string;
   records: Array<IFlight>;
   selectedRecord: IFlight | null;
-  total: number;
+  count: number;
 }
 
 const initialState: FlightsState = {
@@ -22,7 +22,7 @@ const initialState: FlightsState = {
   error: null,
   records: [],
   selectedRecord: null,
-  total: 0,
+  count: 0,
 };
 
 export default initialState;

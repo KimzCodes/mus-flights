@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from "axios";
 import { IFlight } from "../../../types/Flight";
 
 interface FlightResponse {
-  total: number;
   count: number;
   resources: IFlight[];
 }
@@ -19,6 +18,7 @@ const actGetFlights = createAsyncThunk(
   async (payLoad: PayLoad, thunkAPI) => {
     const { rejectWithValue, signal } = thunkAPI;
     const { size, page, search } = payLoad;
+
     const query: string = search
       ? `page=${page}&size=${size}&code=${search}`
       : `page=${page}&size=${size}`;

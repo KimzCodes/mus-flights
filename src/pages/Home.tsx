@@ -15,7 +15,7 @@ import { IFlightWithCrudHandler, IFlight } from "../types/Flight";
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const { loading, error, records, total } = useAppSelector(
+  const { loading, error, records, count } = useAppSelector(
     (state) => state.flights
   );
 
@@ -32,20 +32,23 @@ const Home = () => {
   // get prev state to search term changed
 
   const pageSize = 10;
-  const totalPaginationItems = Math.ceil(total / pageSize);
-  // use search params to update url without reload the page
-  const [paginationQuery, setPaginationQuery] = useSearchParams();
+  const totalPaginationItems = Math.ceil(count / pageSize);
 
-  // work in pagination and mounting
+  // use search params to update url without reload the page
+  const setPaginationQuery = useSearchParams()[1];
+
+  // work in mounting
   useEffect(() => {
-    const params = new URLSearchParams(paginationQuery);
-    const selectedPage = params.get("page") ?? 1;
     const promise = dispatch(
-      actGetFlights({ size: pageSize, page: +selectedPage })
+      actGetFlights({
+        size: pageSize,
+        page: 1,
+        search: "",
+      })
     );
 
     return () => promise.abort();
-  }, [dispatch, paginationQuery]);
+  }, [dispatch]);
 
   //work in search
   useEffect(() => {
@@ -55,16 +58,38 @@ const Home = () => {
       const debounceSearch = setTimeout(() => {
         dispatch(
           actGetFlights({ size: pageSize, page: 1, search: searchQuery })
-        );
+        )
+          .unwrap()
+          .then(() => {
+            if (searchQuery) {
+              setPaginationQuery(`?search=${searchQuery}`);
+            }
+          });
       }, 500);
 
       return () => {
         clearTimeout(debounceSearch);
       };
     }
-  }, [searchQuery, prevSearchQuery, pageSize, dispatch]);
+    // reset
+    if (
+      isValidInput === false &&
+      searchQuery === "" &&
+      prevSearchQuery !== "" &&
+      prevSearchQuery !== null
+    ) {
+      setPaginationQuery("");
+      dispatch(
+        actGetFlights({
+          size: pageSize,
+          page: 1,
+          search: "",
+        })
+      );
+    }
+  }, [searchQuery, prevSearchQuery, pageSize, dispatch, setPaginationQuery]);
 
-  //get info of selected flight however its edit or delete operation
+  //get info of selected flight however its edit, delete operation or preview
   const selectRecordHandler = useCallback((data: IFlightWithCrudHandler) => {
     const { handle, ...flightData } = data;
     if (handle === "delete") {
@@ -89,11 +114,21 @@ const Home = () => {
   // paginate
   const paginationHandler = useCallback(
     (num: number) => {
-      const queryString = `?page=${num}`;
+      let queryString = `?page=${num}`;
+      if (searchQuery) {
+        queryString += `&search=${searchQuery}`;
+      }
+      dispatch(
+        actGetFlights({
+          size: pageSize,
+          page: num,
+          search: searchQuery,
+        })
+      );
       setPaginationQuery(queryString);
       setCurrentPage(num);
     },
-    [setPaginationQuery]
+    [setPaginationQuery, searchQuery, dispatch]
   );
 
   return (
@@ -115,6 +150,7 @@ const Home = () => {
         showDialog={previewImageModal}
         setShowDialog={setPreviewImageModal}
       />
+      {/* search Control */}
       <Form.Control
         type="text"
         placeholder="search with valid flight code"

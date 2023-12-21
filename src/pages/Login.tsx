@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actLogin, resetErrorMsg } from "../store/auth/authSlice";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "../util/authSchema";
+import useAuthValidation from "../hooks/useAuthValidation";
 
 import { Button, Form } from "react-bootstrap";
 
@@ -17,14 +16,12 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
   const abortControllerRef = useRef<null | { abort: () => void }>(null);
-
+  const { loginPasswordValidation, emailValidation } = useAuthValidation();
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: yupResolver(loginSchema),
-  });
+  } = useForm<FormValues>({ mode: "onBlur" });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     abortControllerRef.current = dispatch(
@@ -54,7 +51,7 @@ const Login = () => {
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
-            {...register("email")}
+            {...register("email", emailValidation)}
             isInvalid={!!errors.email}
           />
           <Form.Control.Feedback type="invalid">
@@ -66,7 +63,7 @@ const Login = () => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
-            {...register("password")}
+            {...register("password", loginPasswordValidation)}
             isInvalid={!!errors.password}
           />
           <Form.Control.Feedback type="invalid">

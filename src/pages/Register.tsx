@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actRegister, resetErrorMsg } from "../store/auth/authSlice";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { registerSchema } from "../util/authSchema";
+import useAuthValidation from "../hooks/useAuthValidation";
 import { Button, Form } from "react-bootstrap";
 
 type FormValues = {
@@ -18,14 +17,17 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
   const abortControllerRef = useRef<null | { abort: () => void }>(null);
+  const { emailValidation, passwordValidation, nameValidation } =
+    useAuthValidation();
 
   const {
     handleSubmit,
     register,
+    watch,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: yupResolver(registerSchema),
-  });
+  } = useForm<FormValues>({ mode: "onBlur" });
+
+  const password = watch("password", "");
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     abortControllerRef.current = dispatch(
@@ -55,7 +57,7 @@ const Register = () => {
           <Form.Label>Full Name</Form.Label>
           <Form.Control
             type="text"
-            {...register("name")}
+            {...register("name", nameValidation)}
             isInvalid={!!errors.name}
           />
           <Form.Control.Feedback type="invalid">
@@ -67,7 +69,7 @@ const Register = () => {
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
-            {...register("email")}
+            {...register("email", emailValidation)}
             isInvalid={!!errors.email}
           />
           <Form.Control.Feedback type="invalid">
@@ -79,7 +81,7 @@ const Register = () => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
-            {...register("password")}
+            {...register("password", passwordValidation)}
             isInvalid={!!errors.password}
           />
           <Form.Control.Feedback type="invalid">
@@ -91,7 +93,11 @@ const Register = () => {
           <Form.Label>Password Confirm</Form.Label>
           <Form.Control
             type="password"
-            {...register("passwordConfirm")}
+            {...register("passwordConfirm", {
+              required: "Confirm Password is required",
+              validate: (value) =>
+                value === password || "Passwords do not match",
+            })}
             isInvalid={!!errors.passwordConfirm}
           />
           <Form.Control.Feedback type="invalid">
