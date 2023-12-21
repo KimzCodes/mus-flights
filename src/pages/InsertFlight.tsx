@@ -14,7 +14,7 @@ type FormValues = {
   code: string;
   capacity: number;
   departureDate: string;
-  photo: FileList;
+  photo?: FileList | null;
 };
 
 const InsertFlight = () => {
@@ -44,6 +44,7 @@ const InsertFlight = () => {
     trigger,
     setValue,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm<FormValues>({
     mode: "onBlur",
@@ -98,11 +99,16 @@ const InsertFlight = () => {
   const onPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      clearErrors("photo");
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+      setValue("photo", null);
     }
   };
   return (
