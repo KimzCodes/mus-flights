@@ -65,7 +65,7 @@ const Home = () => {
               setPaginationQuery(`?search=${searchQuery}`);
             }
           });
-      }, 500);
+      }, 700);
 
       return () => {
         clearTimeout(debounceSearch);
