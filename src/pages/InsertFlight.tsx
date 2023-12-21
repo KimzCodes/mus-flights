@@ -107,10 +107,16 @@ const InsertFlight = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      setImagePreview(null);
-      setValue("photo", null);
+      removeImage();
     }
   };
+
+  const removeImage = () => {
+    clearErrors("photo");
+    setImagePreview(null);
+    setValue("photo", null);
+  };
+
   return (
     <>
       <h4 className="mb-4 mt-4">Create New Flight</h4>
@@ -179,19 +185,32 @@ const InsertFlight = () => {
                 isInvalid={!!errors.photo}
                 onChange={onPhotoChange}
               />
+              {imagePreview ? (
+                <Form.Text muted className="mt-1">
+                  If you choose a file now and then click cancel, the selected
+                  image will be deleted.
+                </Form.Text>
+              ) : (
+                ""
+              )}
+
               <Form.Control.Feedback type="invalid">
                 {errors.photo?.message}
               </Form.Control.Feedback>
             </Col>
-            <div style={{ position: "absolute", right: "0", width: "auto" }}>
-              {imagePreview && (
+
+            {imagePreview ? (
+              <div style={{ position: "absolute", right: "0", width: "auto" }}>
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  style={{ maxWidth: "100%", maxHeight: "100px" }}
+                  style={{ maxWidth: "100%", maxHeight: "150px" }}
                 />
-              )}
-            </div>
+                <button className="btn btn-close" onClick={removeImage} />
+              </div>
+            ) : (
+              ""
+            )}
           </Row>
         </Form.Group>
 
