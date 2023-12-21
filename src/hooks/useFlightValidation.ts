@@ -26,16 +26,6 @@ const departureDateValidation: RegisterOptions = {
     value: /^\d{4}-\d{2}-\d{2}$/,
     message: "Invalid date format (YYYY-MM-DD)",
   },
-  validate: (value) => {
-    const currentDate = new Date();
-    const selectedDate = new Date(value);
-    currentDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-
-    if (selectedDate <= currentDate) {
-      return "Departure Date should be in the future";
-    }
-    return true;
-  },
 };
 
 const imageValidation: RegisterOptions = {
