@@ -5,7 +5,7 @@ interface FlightData {
   code: string;
   capacity: number;
   departureDate: string;
-  photo?: FileList | string;
+  photo?: FileList | null;
 }
 
 const actCreateFlight = createAsyncThunk(
