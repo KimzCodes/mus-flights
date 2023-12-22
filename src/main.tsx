@@ -10,6 +10,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // axios
 import "./API/axios-global";
 
+// css
+import "./styles/index.css";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

@@ -1,0 +1,36 @@
+/* Dark mode background color */
+.dark-mode {
+  background-color: #121212;
+  color: #fff;
+}
+
+/* Additional styling for form elements in dark mode */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea,
+.dark-mode .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+.dark-mode input::placeholder,
+.dark-mode select::placeholder,
+.dark-mode textarea::placeholder {
+  color: #888;
+}
+
+.dark-mode .form-check-input:checked {
+  background-color: #333;
+  border-color: #555;
+}
+/* card component */
+.dark-mode .card {
+  background-color: #555;
+  color: #fff;
+}
+
+.dark-mode .page-link {
+  background-color: #555;
+  color: #fff;
+}

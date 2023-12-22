@@ -67,6 +67,7 @@ const flightsSlice = createSlice({
       state.editLoading = "succeeded";
       state.records = state.records.map((record) => {
         if (record.id === action.payload.id) {
+          console.log(action.payload);
           return { ...record, ...action.payload };
         }
         return { ...record };

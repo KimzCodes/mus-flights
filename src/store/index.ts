@@ -14,6 +14,13 @@ import storage from "redux-persist/lib/storage";
 // reducers
 import auth from "./auth/authSlice";
 import flights from "./flights/flightsSlice";
+import darkMode from "./darkmode/darkModeSlice";
+
+const rootPersistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["darkMode"],
+};
 
 const authPersistConfig = {
   key: "auth",
@@ -24,10 +31,13 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   flights,
+  darkMode,
 });
 
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

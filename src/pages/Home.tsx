@@ -140,12 +140,14 @@ const Home = () => {
   return (
     <>
       <h4 className="mb-4 mt-4">All Flights</h4>
+
       <ModalDelete
         code={selectDeleteRecord.current?.code ?? ""}
         deleteHandler={deleteHandler}
         showDialog={deleteModal}
         setShowDialog={setDeleteModal}
       />
+
       <ModalEdit
         flightData={selectedEditRecord.current}
         showDialog={editModal}

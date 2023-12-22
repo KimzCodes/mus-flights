@@ -24,6 +24,7 @@ const FlightsList = memo(
     pageSize,
   }: Props) => {
     const { screenSize } = useResponsiveLayout();
+    const startIndex = (currentPage - 1) * pageSize + 1;
 
     const paginationItems = [...Array(totalPaginationItems)].map((_, index) => {
       return (
@@ -32,8 +33,6 @@ const FlightsList = memo(
         </Pagination.Item>
       );
     });
-
-    const startIndex = (currentPage - 1) * pageSize + 1;
 
     return (
       <>

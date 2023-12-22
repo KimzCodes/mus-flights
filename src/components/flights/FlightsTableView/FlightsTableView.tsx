@@ -1,6 +1,7 @@
-import { Table, ButtonGroup, Button } from "react-bootstrap";
+import { useAppSelector } from "../../../store/hooks";
 import ReviewImage from "../../../assets/svg/reviewImage.svg?react";
 import NoImage from "../../../assets/svg/noImage.svg?react";
+import { Table, ButtonGroup, Button } from "react-bootstrap";
 import { IFlightWithCrudHandler, IFlight } from "../../../types/Flight";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const FlightsTableView = ({ startIndex, records, selectRecord }: Props) => {
+  const darkModeOn = useAppSelector((state) => state.darkMode.darkModeOn);
   const renderFlights =
     records.length > 0 ? (
       records.map((record, idx) => (
@@ -67,7 +69,13 @@ const FlightsTableView = ({ startIndex, records, selectRecord }: Props) => {
       </tr>
     );
   return (
-    <Table striped bordered hover className="mt-1">
+    <Table
+      striped
+      bordered
+      hover
+      className="mt-1"
+      variant={darkModeOn ? "dark" : ""}
+    >
       <thead>
         <tr>
           <th>#</th>

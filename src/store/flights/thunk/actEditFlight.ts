@@ -27,6 +27,7 @@ const actEditFlight = createAsyncThunk(
           `flights/${id}/withPhoto`,
           formData
         );
+        response.data.img = "image";
       } else {
         response = await axios.put<FlightData>(`flights/${id}`, flightData);
       }

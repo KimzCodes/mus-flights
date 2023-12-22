@@ -18,13 +18,17 @@ type FormValues = {
   capacity: number;
   departureDate: string;
   photo?: FileList | null;
+  flightHasImage?: boolean;
 };
 
 const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
   const dispatch = useAppDispatch();
   const { editLoading, error } = useAppSelector((state) => state.flights);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const [uploadImagePreview, setUploadImagePreview] = useState<string | null>(
+    null
+  );
+  //flight has an image from db and set ability to remove it
+  const [flightHasImage, setFlightHasImage] = useState<boolean>(false);
   const { imageValidation, capacityValidation, departureDateValidation } =
     useFlightValidation();
 
@@ -44,10 +48,12 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
       capacity: flightData?.capacity,
       departureDate: flightData?.departureDate,
     });
-
     if (flightData?.img) {
-      setImagePreview(`http://localhost:3000/flights/${flightData?.id}/photo`);
+      setFlightHasImage(true);
     }
+    return () => {
+      setFlightHasImage(false);
+    };
   }, [flightData, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -56,8 +62,8 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
         id: flightData?.id ? flightData?.id : "",
         code: data?.code ? data?.code : "",
         departureDate: data.departureDate,
-        capacity: data?.capacity,
-        photo: data?.photo,
+        capacity: +data?.capacity,
+        photo: data.photo,
       })
     )
       .unwrap()
@@ -68,12 +74,13 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
 
   const onPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       clearErrors("photo");
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setUploadImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     } else {
@@ -83,7 +90,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
 
   const removeImage = () => {
     clearErrors("photo");
-    setImagePreview(null);
+    setUploadImagePreview(null);
     setValue("photo", null);
   };
 
@@ -122,38 +129,58 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
               {errors.capacity?.message}
             </Form.Control.Feedback>
           </Form.Group>
-
-          <Form.Group className="mb-3" style={{ position: "relative" }}>
-            <Form.Label>
-              Photo <span style={{ fontSize: "13px" }}>(Replace)</span>
-            </Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/png, image/jpeg"
-              {...register("photo", imageValidation)}
-              isInvalid={!!errors.photo}
-              onChange={onPhotoChange}
-            />
-
-            <Form.Control.Feedback type="invalid">
-              {errors.photo?.message}
-            </Form.Control.Feedback>
-            <Form.Text muted className="mt-1">
-              If you choose a file now and then click cancel, the selected image
-              will be deleted.
-            </Form.Text>
-            {imagePreview ? (
-              <div className="mt-1">
-                <img
-                  src={imagePreview}
-                  style={{ maxWidth: "100%", maxHeight: "150px" }}
+          {!flightHasImage ? (
+            <>
+              <Form.Group className="mb-3" style={{ position: "relative" }}>
+                <Form.Label>
+                  Photo <span style={{ fontSize: "13px" }}>(Replace)</span>
+                </Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  {...register("photo", imageValidation)}
+                  isInvalid={!!errors.photo}
+                  onChange={onPhotoChange}
                 />
-                <button className="btn btn-close" onClick={removeImage} />
-              </div>
-            ) : (
-              ""
-            )}
-          </Form.Group>
+
+                <Form.Control.Feedback type="invalid">
+                  {errors.photo?.message}
+                </Form.Control.Feedback>
+                {uploadImagePreview ? (
+                  <Form.Text muted className="mt-1">
+                    If you choose a file now and then click cancel, the selected
+                    image will be deleted.
+                  </Form.Text>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
+              {uploadImagePreview ? (
+                <div className="mb-3">
+                  <img
+                    src={uploadImagePreview}
+                    style={{ maxWidth: "100%", maxHeight: "150px" }}
+                  />
+
+                  <button className="btn btn-close" onClick={removeImage} />
+                </div>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            <div className="mb-3">
+              <img
+                src={`http://localhost:3000/flights/${flightData?.id}/photo`}
+                style={{ maxWidth: "100%", maxHeight: "150px" }}
+              />
+              <button
+                className="btn btn-close"
+                onClick={() => setFlightHasImage(false)}
+              />
+            </div>
+          )}
+
           <Button
             variant="primary"
             type="submit"
@@ -163,7 +190,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
               marginRight: "3px",
             }}
           >
-            {editLoading === "pending" ? "Loading" : "Submit"}
+            {editLoading === "pending" ? "Loading" : "Save Updates"}
           </Button>
 
           <Button variant="secondary" onClick={() => setShowDialog(false)}>
