@@ -8,8 +8,10 @@ const Home = React.lazy(() => import("../pages/Home"));
 const InsertFlight = React.lazy(() => import("../pages/InsertFlight"));
 import ErrorPage from "../pages/ErrorPage";
 //layouts
-import WelcomeLayout from "../layouts/WelcomeLayout/WelcomeLayout";
-import MainLayout from "../layouts/MainLayout/MainLayout";
+const WelcomeLayout = React.lazy(
+  () => import("../layouts/WelcomeLayout/WelcomeLayout")
+);
+const MainLayout = React.lazy(() => import("../layouts/MainLayout/MainLayout"));
 // suspense
 import SuspenseLoading from "../components/feedback/SuspenseLoading/SuspenseLoading";
 // guards
@@ -21,7 +23,18 @@ const routes = createBrowserRouter([
     path: "/",
     element: (
       <Visitor>
-        <WelcomeLayout />
+        <Suspense
+          fallback={
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: "100vh" }}
+            >
+              <h3>Hang tight! We're loading your content...</h3>
+            </div>
+          }
+        >
+          <WelcomeLayout />
+        </Suspense>
       </Visitor>
     ),
     errorElement: <ErrorPage />,
@@ -57,7 +70,18 @@ const routes = createBrowserRouter([
     path: "/home",
     element: (
       <Authenticated>
-        <MainLayout />
+        <Suspense
+          fallback={
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: "100vh" }}
+            >
+              <h3>Hang tight! We're loading your content...</h3>
+            </div>
+          }
+        >
+          <MainLayout />
+        </Suspense>
       </Authenticated>
     ),
     children: [

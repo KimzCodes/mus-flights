@@ -4,7 +4,7 @@
   color: #fff;
 }
 
-/* Additional styling for form elements in dark mode */
+/* form elements in dark mode */
 .dark-mode input,
 .dark-mode select,
 .dark-mode textarea,
@@ -31,6 +31,20 @@
 }
 
 .dark-mode .page-link {
+  background-color: #555;
+  color: #fff;
+}
+
+.dark-mode input:disabled {
+  background-color: #444;
+  color: #888;
+  border-color: #555;
+}
+
+/* dark mode for modal */
+.dark-mode .modal-body,
+.dark-mode .modal-header,
+.dark-mode .modal-footer {
   background-color: #555;
   color: #fff;
 }

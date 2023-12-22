@@ -11,7 +11,7 @@ const ErrorPage = () => {
           <div className="d-flex align-items-center justify-content-center flex-column mt-5">
             <Lottie animationData={notFoundAnimation} loop={true} />
             <Link to="/" replace={true} className="text-center">
-              Looks like you've stumbled upon a non-existent page. <br />
+              Looks like you've reached to non-existent page. <br />
               How about going back to safety?
             </Link>
           </div>

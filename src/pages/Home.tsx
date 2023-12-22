@@ -70,7 +70,7 @@ const Home = () => {
               setPaginationQuery(`?search=${searchQuery}`);
             }
           });
-      }, 700);
+      }, 400);
 
       return () => {
         clearTimeout(debounceSearch);
