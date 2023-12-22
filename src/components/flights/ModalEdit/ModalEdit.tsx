@@ -160,6 +160,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
                   <img
                     src={uploadImagePreview}
                     style={{ maxWidth: "100%", maxHeight: "150px" }}
+                    alt="preview"
                   />
 
                   <button className="btn btn-close" onClick={removeImage} />
@@ -173,6 +174,7 @@ const ModalEdit = memo(({ showDialog, setShowDialog, flightData }: Props) => {
               <img
                 src={`http://localhost:3000/flights/${flightData?.id}/photo`}
                 style={{ maxWidth: "100%", maxHeight: "150px" }}
+                alt="preview"
               />
               <button
                 className="btn btn-close"

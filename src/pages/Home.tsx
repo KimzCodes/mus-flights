@@ -166,11 +166,9 @@ const Home = () => {
         className="mb-3"
         disabled={loading === "pending" ? true : false}
         onChange={(e) => {
-          {
-            // Remove non-alphabetic characters using a regular expression
-            const sanitizedValue = e.target.value.replace(/[^a-z]/gi, "");
-            setSearchQuery(sanitizedValue);
-          }
+          // Remove non-alphabetic characters using a regular expression
+          const sanitizedValue = e.target.value.replace(/[^a-z]/gi, "");
+          setSearchQuery(sanitizedValue);
         }}
         value={searchQuery}
         maxLength={6}
