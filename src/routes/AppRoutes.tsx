@@ -1,22 +1,23 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-//pages
-const Login = React.lazy(() => import("../pages/Login"));
-const Register = React.lazy(() => import("../pages/Register"));
-const Home = React.lazy(() => import("../pages/Home"));
-const InsertFlight = React.lazy(() => import("../pages/InsertFlight"));
-import ErrorPage from "../pages/ErrorPage";
-//layouts
-const WelcomeLayout = React.lazy(
-  () => import("../layouts/WelcomeLayout/WelcomeLayout")
-);
-const MainLayout = React.lazy(() => import("../layouts/MainLayout/MainLayout"));
 // suspense
 import SuspenseLoading from "../components/feedback/SuspenseLoading/SuspenseLoading";
 // guards
 import Visitor from "../components/guards/Visitor";
 import Authenticated from "../components/guards/Authenticated";
+
+//pages
+import ErrorPage from "../pages/ErrorPage";
+const Login = React.lazy(() => import("../pages/Login"));
+const Register = React.lazy(() => import("../pages/Register"));
+const Home = React.lazy(() => import("../pages/Home"));
+const InsertFlight = React.lazy(() => import("../pages/InsertFlight"));
+//layouts
+const WelcomeLayout = React.lazy(
+  () => import("../layouts/WelcomeLayout/WelcomeLayout")
+);
+const MainLayout = React.lazy(() => import("../layouts/MainLayout/MainLayout"));
 
 const routes = createBrowserRouter([
   {

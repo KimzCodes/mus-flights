@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { logout } from "../../../store/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import DarkMode from "../../DarkMode/DarkMode";
+import DarkMode from "../DarkMode/DarkMode";
 import Logo from "../Logo/Logo";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 

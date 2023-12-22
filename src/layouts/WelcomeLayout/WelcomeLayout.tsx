@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import DarkMode from "../../components/DarkMode/DarkMode";
+import DarkMode from "../../components/layout/DarkMode/DarkMode";
 import { Container, Row, Col } from "react-bootstrap";
 
 import styles from "./styles.module.css";

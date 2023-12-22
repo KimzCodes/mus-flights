@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setDarkMode } from "../../store/darkmode/darkModeSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setDarkMode } from "../../../store/darkmode/darkModeSlice";
 import styles from "./style.module.css";
 
 const DarkMode = () => {
